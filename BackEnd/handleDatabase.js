@@ -1,9 +1,10 @@
 import express  from "express"; // nodejs framework
-import cors from "cors" //middleware for security / to received request only to set sites/origin. 
-import mysql2 from "mysql2" //liblary for npm and database purpose
+import cors from "cors";//middleware for security / to received request only to set sites/origin. 
+import mysql2 from "mysql2"; //liblary for npm and database purpose
 import helmet from "helmet"; //middleware for security from attacks
+import bycrypt from "bcrypt"
 
-import cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser"; //cookie purposes
 
 
 const app = express();
@@ -42,6 +43,60 @@ pool.getConnection((err, connection) => {
       connection.release();
     }
 });
+
+
+const emailChecker = (req) => {
+
+  return new Promise((resolve, reject) => {
+    pool
+      .promise()
+      .query('SELECT * FROM `admin` WHERE `email` = ?', [req.body.email])
+      .then(([result])=> {
+        resolve(result.length);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  })
+}
+
+const passwordHash = async (req) => {
+  const password = req.body.password
+  
+  const saltRounds = 4;
+  const salt = await bycrypt.genSalt(saltRounds)
+
+  const hashedPassword = await bycrypt.hash(password, salt);
+
+  return hashedPassword;
+}
+
+
+
+
+
+
+app.post('/signup', async (req, res) => {
+
+  try {
+    const emailResult = await emailChecker(req);
+    if(emailResult > 0){
+      res.status(401).json({isEmailUsed: true })
+    }else{
+
+      const password = await passwordHash(req);
+      const result = await pool.promise().query("INSERT INTO admin (`name`, `email`, `password`) VALUES (?, ?, ?)", [req.body.name, req.body.email, password])
+
+      const modResult = {...result, isEmailUsed: false}
+
+      res.json(modResult)
+    }
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+})
 
 
 
