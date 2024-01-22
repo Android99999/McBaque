@@ -156,7 +156,11 @@ function Signup() {
                     </div>
 
                     <button type='submit' className='bg-slate-700 text-[1.4em] py-2 rounded font-bold text-neutral-200'>Continue</button>
-                    <button type='button' className=' border-slate-700 border-solid border-2 text-[1.4em] py-2 rounded font-bold text-neutral-800' onClick={handleLogin}>Signin</button>
+                    <div className='w-full  flex flex-row justify-center gap-3'>
+                        <p className=' font-Poppins tracking-wider'>Already have accout?</p>
+                        <a onClick={handleLogin} className='underline font-black pointer cursor-pointer font-Poppins tracking-widest '>Sign in</a>
+                    </div>
+                    
 
             </form>
 
