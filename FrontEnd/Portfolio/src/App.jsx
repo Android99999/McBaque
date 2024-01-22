@@ -36,6 +36,7 @@ function App() {
         <Routes>
           
           <Route path="/" element={loading ? <Landing /> : <Navigate to="/login" />} />
+          {/* <Route path='/' element={<Landing/>}></Route> */}
           <Route path='/login' element={<Login/>}></Route>
           <Route path='/portfolio' element={<Portfolio/>}></Route>
           <Route path='/signup' element={<Signup/>}></Route>
