@@ -23,6 +23,10 @@ function Login() {
 
     }
 
+    const handleSignup = () => {
+        navigate('/signup')
+    }
+
     
     useEffect(()=>{
         console.log(values)
@@ -46,6 +50,8 @@ function Login() {
             </div>
 
             </form>
+
+            <button type="button" onClick={handleSignup}>Sign up</button>
         </div>
     </div>
   )
