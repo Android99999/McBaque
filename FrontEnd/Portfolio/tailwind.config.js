@@ -10,7 +10,8 @@ export default {
       fontFamily: {
         PlayFair: ['Playfair Display', 'serif'],
         Poppins: ['Poppins', 'sans-serif'],
-        Comme: ['Comme', 'sans-serif']
+        Comme: ['Comme', 'sans-serif'],
+        Lexend: ['Lexend', 'sans-serif']
       },
       screens: {
         xs: "550px",

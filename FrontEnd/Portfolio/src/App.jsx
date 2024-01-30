@@ -7,6 +7,8 @@ import Signup from './Main/Signup'
 import Landing from './Main/Landing'
 
 import './App.css'
+import Signin from './Main/Signin'
+import Signupv2 from './Main/Signupv2'
 
 
 function App() {
@@ -32,14 +34,18 @@ function App() {
 
   return (
     <>
+    {/* <Signin/> */}
+    
+
+
       <BrowserRouter>
         <Routes>
           
-          <Route path="/" element={loading ? <Landing /> : <Navigate to="/login" />} />
-          {/* <Route path='/' element={<Landing/>}></Route> */}
-          <Route path='/login' element={<Login/>}></Route>
+          <Route path="/" element={loading ? <Landing /> : <Navigate to="/signin" />} />
+         
+          <Route path='/signin' element={<Signin/>}></Route>
           <Route path='/portfolio' element={<Portfolio/>}></Route>
-          <Route path='/signup' element={<Signup/>}></Route>
+          <Route path='/signup' element={<Signupv2/>}></Route>
 
         </Routes>
       </BrowserRouter>
