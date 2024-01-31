@@ -1,6 +1,6 @@
 import express  from "express"; // nodejs framework
 import cors from "cors";//middleware for security / to received request only to set sites/origin. 
-import mysql2 from "mysql2"; //liblary for npm and database purpose
+// import mysql2 from "mysql2"; //liblary for npm and database purpose
 import helmet from "helmet"; //middleware for security from attacks
 import bycrypt from "bcrypt"
 
@@ -22,82 +22,82 @@ app.use(cors({
     optionsSuccessStatus: 204,
 }))
 
-//Make config about your connection
-const pool = mysql2.createPool({    
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'id19452532_scfos',
-    password: process.env.DB_PASSWORD || '09109305761Mac.',
-    database: process.env.DB_NAME || 'id19452532_scfosv3',
-    port: process.env.DB_PORT || 3306,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-})
+// //Make config about your connection
+// const pool = mysql2.createPool({    
+//     host: process.env.DB_HOST || 'localhost',
+//     user: process.env.DB_USER || 'id19452532_scfos',
+//     password: process.env.DB_PASSWORD || '09109305761Mac.',
+//     database: process.env.DB_NAME || 'id19452532_scfosv3',
+//     port: process.env.DB_PORT || 3306,
+//     waitForConnections: true,
+//     connectionLimit: 10,
+//     queueLimit: 0,
+// })
 
-// Check Connection
-pool.getConnection((err, connection) => {
-    if (err) {
-      console.error('Error connecting to the database:', err);
-    } else {
-      console.log('Connected to the database!');
-      // Release the connection back to the pool
-      connection.release();
-    }
-});
+// // Check Connection
+// pool.getConnection((err, connection) => {
+//     if (err) {
+//       console.error('Error connecting to the database:', err);
+//     } else {
+//       console.log('Connected to the database!');
+//       // Release the connection back to the pool
+//       connection.release();
+//     }
+// });
 
 
-const emailChecker = (req) => {
+// const emailChecker = (req) => {
 
-  return new Promise((resolve, reject) => {
-    pool
-      .promise()
-      .query('SELECT * FROM `admin` WHERE `email` = ?', [req.body.email])
-      .then(([result])=> {
-        resolve(result.length);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  })
-}
+//   return new Promise((resolve, reject) => {
+//     pool
+//       .promise()
+//       .query('SELECT * FROM `admin` WHERE `email` = ?', [req.body.email])
+//       .then(([result])=> {
+//         resolve(result.length);
+//       })
+//       .catch((error) => {
+//         reject(error);
+//       });
+//   })
+// }
 
-const passwordHash = async (req) => {
-  const password = req.body.password
+// const passwordHash = async (req) => {
+//   const password = req.body.password
   
-  const saltRounds = 4;
-  const salt = await bycrypt.genSalt(saltRounds)
+//   const saltRounds = 4;
+//   const salt = await bycrypt.genSalt(saltRounds)
 
-  const hashedPassword = await bycrypt.hash(password, salt);
+//   const hashedPassword = await bycrypt.hash(password, salt);
 
-  return hashedPassword;
-}
-
-
+//   return hashedPassword;
+// }
 
 
 
 
-app.post('/signup', async (req, res) => {
 
-  try {
-    const emailResult = await emailChecker(req);
-    if(emailResult > 0){
-      res.status(401).json({isEmailUsed: true })
-    }else{
 
-      const password = await passwordHash(req);
-      const result = await pool.promise().query("INSERT INTO admin (`name`, `email`, `password`) VALUES (?, ?, ?)", [req.body.name, req.body.email, password])
+// app.post('/signup', async (req, res) => {
 
-      const modResult = {...result, isEmailUsed: false}
+//   try {
+//     const emailResult = await emailChecker(req);
+//     if(emailResult > 0){
+//       res.status(401).json({isEmailUsed: true })
+//     }else{
 
-      res.json(modResult)
-    }
+//       const password = await passwordHash(req);
+//       const result = await pool.promise().query("INSERT INTO admin (`name`, `email`, `password`) VALUES (?, ?, ?)", [req.body.name, req.body.email, password])
+
+//       const modResult = {...result, isEmailUsed: false}
+
+//       res.json(modResult)
+//     }
     
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-})
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// })
 
 
 
@@ -112,17 +112,45 @@ app.post('/signup', async (req, res) => {
 
 
 
-//Check if working
-app.listen(port, () => {
-    console.log(`Server is running on ${port}`)
-})
+// //Check if working
+// app.listen(port, () => {
+//     console.log(`Server is running on ${port}`)
+// })
 
-// Error handling for server setup
-app.on('error', (err) => {
-    console.error('Server error:', err);
-});
+// // Error handling for server setup
+// app.on('error', (err) => {
+//     console.error('Server error:', err);
+// });
   
-  // Handle unhandled promise rejections (e.g., database connection errors)
-process.on('unhandledRejection', (err) => {
-    console.error('Unhandled Rejection:', err);
+//   // Handle unhandled promise rejections (e.g., database connection errors)
+// process.on('unhandledRejection', (err) => {
+//     console.error('Unhandled Rejection:', err);
+// });
+
+
+
+import { MongoClient, ServerApiVersion } from 'mongodb';
+const uri = "mongodb+srv://vercel-admin-user:iK0FaSM7H6EzlkyF@cluster0.npib522.mongodb.net/?retryWrites=true&w=majority";
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
 });
+
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+run().catch(console.dir);

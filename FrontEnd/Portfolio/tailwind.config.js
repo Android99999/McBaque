@@ -11,7 +11,8 @@ export default {
         PlayFair: ['Playfair Display', 'serif'],
         Poppins: ['Poppins', 'sans-serif'],
         Comme: ['Comme', 'sans-serif'],
-        Lexend: ['Lexend', 'sans-serif']
+        Lexend: ['Lexend', 'sans-serif'],
+        Rufina: ['Rufina', 'serif']
       },
       screens: {
         xs: "550px",
@@ -23,7 +24,13 @@ export default {
 
     },
   },
-  plugins: [],
+  plugins: [
+  
+    
+  ],
+  "prettier":{
+    "plugins": ["prettier-plugin-tailwindcss"]
+  }
 
 }
 
