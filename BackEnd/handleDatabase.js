@@ -7,6 +7,8 @@ import bycrypt from "bcrypt"
 import cookieParser from "cookie-parser"; //cookie purposes
 
 
+
+
 const app = express();
 const port = 8080;
 
@@ -21,6 +23,10 @@ app.use(cors({
     credentials: true,
     optionsSuccessStatus: 204,
 }))
+
+
+
+
 
 // //Make config about your connection
 // const pool = mysql2.createPool({    
@@ -112,20 +118,25 @@ app.use(cors({
 
 
 
-// //Check if working
-// app.listen(port, () => {
-//     console.log(`Server is running on ${port}`)
-// })
+//Check if working
+app.listen(port, () => {
+    console.log(`Server is running on ${port}`)
+})
 
-// // Error handling for server setup
-// app.on('error', (err) => {
-//     console.error('Server error:', err);
-// });
+// Error handling for server setup
+app.on('error', (err) => {
+    console.error('Server error:', err);
+});
   
-//   // Handle unhandled promise rejections (e.g., database connection errors)
-// process.on('unhandledRejection', (err) => {
-//     console.error('Unhandled Rejection:', err);
-// });
+  // Handle unhandled promise rejections (e.g., database connection errors)
+process.on('unhandledRejection', (err) => {
+    console.error('Unhandled Rejection:', err);
+});
+
+process.on('SIGINT', () => {
+  client.close();
+  process.exit();
+});
 
 
 
@@ -141,16 +152,102 @@ const client = new MongoClient(uri, {
   }
 });
 
+let db;
+
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    db = client.db("Portfolio");
+    
+    await db.command({ ping: 1 });
+
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
+
+    startServer();
+
+  } catch (error) {
     await client.close();
+    console.error('Error connecting to MongoDB:', error);
   }
+
 }
+
+
+function startServer() {
+
+  const users = db.collection('Users');
+
+  const emailChecker = async (req, res) => {
+    const emailData = req.body.email
+    
+    console.log(emailData)
+    try {
+      const result = await users.findOne({email: emailData});
+      if(result){
+        console.log(`Email Exist ${emailData}`)
+        return true;
+      }else{
+        console.log(`Email doesn't exist ${emailData}`)
+      
+        return false;
+      }
+      
+    } catch (error) {
+      console.error(error);
+      console.error('Catch Email');
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+
+  }
+
+
+  
+
+  app.post('/signup', async (req, res) => {
+    const newData = req.body;
+    console.log(newData);
+
+    const emailIsUsed = await emailChecker(req);
+
+    if(emailIsUsed){
+
+        return res.json({message: 'Email Already Exist'});
+
+    }else{
+
+      
+        try {
+          const result = await users.insertOne(newData);
+          console.log('Inserted document:', result.insertedId);
+          res.json({response:{message: 'User created successfully', result: result}});
+          
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: 'Internal Server Error' });
+        } 
+
+    }
+
+  });
+
+  // Add more routes or configurations here as needed
+}
+
+
+
+
+
+
+
+
+
 run().catch(console.dir);
+
+
+
+
+
+
+  
