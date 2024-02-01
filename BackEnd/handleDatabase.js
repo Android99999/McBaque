@@ -67,16 +67,16 @@ app.use(cors({
 //   })
 // }
 
-// const passwordHash = async (req) => {
-//   const password = req.body.password
+const passwordHash = async (req) => {
+  const password = req.body.password
   
-//   const saltRounds = 4;
-//   const salt = await bycrypt.genSalt(saltRounds)
+  const saltRounds = 4;
+  const salt = await bycrypt.genSalt(saltRounds)
 
-//   const hashedPassword = await bycrypt.hash(password, salt);
+  const hashedPassword = await bycrypt.hash(password, salt);
 
-//   return hashedPassword;
-// }
+  return hashedPassword;
+}
 
 
 
@@ -217,9 +217,13 @@ function startServer() {
 
     }else{
 
+      const password = passwordHash(req)
+
+      const newDataHashed = {...newData, password: password}
+
       
         try {
-          const result = await users.insertOne(newData);
+          const result = await users.insertOne(newDataHashed);
           console.log('Inserted document:', result.insertedId);
           res.json({response:{message: 'User created successfully', result: result}});
           
