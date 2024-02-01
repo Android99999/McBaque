@@ -31,7 +31,7 @@ function Signupv2() {
        
         try {
        
-            const response = await axios.post( localURL+ '/signup', values);
+            const response = await axios.post( localURL + '/signup', values);
     
             console.log(response)
           }catch (error) {

@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 //config your cors
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", 'https://mc-baque-portfolio.vercel.app'],
     methods: ["POST", "GET"],
     credentials: true,
     optionsSuccessStatus: 204,
