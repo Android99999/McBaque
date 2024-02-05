@@ -80,7 +80,7 @@ function Portfolio() {
 
               <div className='min-w-[34%] flex flex-col'>
                 <div className='flex flex-col h-[50%]'>
-                  <div className='h-[50%]'><BiUser size={75}/></div>
+                  <div className='h-[50%]'><BiUser size={75}  color='#3F3F46'/></div>
                   <div className='py-4 text-[2em] font-Poppins font-semibold tracking-widest text-[#7C2629]'>Who I am</div>
                 </div>
                 <div className='w-full font-Poppins font-thin text-[1.4em] py-4 tracking-[0.14em]'>
@@ -90,7 +90,7 @@ function Portfolio() {
 
               <div className='min-w-[30%] flex flex-col'>
                 <div className='flex flex-col h-[50%]'>
-                  <div className='h-[50%]'><BiEditAlt size={75}/></div>
+                  <div className='h-[50%]'><BiEditAlt size={75}  color='#3F3F46'/></div>
                   <div className='py-4 text-[2em] font-Poppins font-semibold tracking-widest text-[#7C2629]'>What I Do</div>
                 </div>
                 <div className='min-w-[100%] font-Poppins font-thin text-[1.4em] tracking-[0.15em] py-4'>
@@ -100,7 +100,7 @@ function Portfolio() {
 
               <div className='min-w-[30%] flex flex-col'>
                 <div className='flex flex-col h-[50%]'>
-                  <div><BiCheckDouble size={75}/></div>
+                  <div  className='h-[50%]'><BiCheckDouble size={75} color='#3F3F46'/></div>
                   <div className='py-4 text-[1.8em] font-Poppins font-semibold text-[#7C2629] tracking-widest'>Why Choose Me</div>
                 </div>
                 <div className='max-w-[100%] font-Poppins font-thin text-[1.4em] tracking-[0.14em] py-4'>
